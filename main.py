@@ -12,8 +12,6 @@ logging.basicConfig(
 
 # API DATA
 
-# We simulate different API behaviors so that you can
-# demonstrate timeout, retry, failure and rate-limit handling.
 
 API_DATA = {
     "users": {
