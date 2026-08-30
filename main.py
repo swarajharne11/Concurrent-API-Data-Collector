@@ -2,10 +2,7 @@ import asyncio
 import logging
 import random
 
-
-# ============================================================
 # LOGGING
-# ============================================================
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,9 +10,7 @@ logging.basicConfig(
 )
 
 
-# ============================================================
 # API DATA
-# ============================================================
 
 # We simulate different API behaviors so that you can
 # demonstrate timeout, retry, failure and rate-limit handling.
@@ -58,9 +53,7 @@ API_DATA = {
 }
 
 
-# ============================================================
 # FAKE API
-# ============================================================
 
 async def api_call(name, behavior):
 
@@ -96,9 +89,7 @@ async def api_call(name, behavior):
     return None
 
 
-# ============================================================
 # API REQUEST WITH TIMEOUT + RETRY
-# ============================================================
 
 async def get_data(name, behavior):
 
@@ -112,9 +103,7 @@ async def get_data(name, behavior):
                 f"{name}: Attempt {attempt + 1}"
             )
 
-            # =================================================
             # TIMEOUT HANDLING
-            # =================================================
 
             result = await asyncio.wait_for(
                 api_call(name, behavior),
@@ -144,9 +133,8 @@ async def get_data(name, behavior):
                 f"{name}: {e}"
             )
 
-            # =================================================
+
             # RETRY HANDLING
-            # =================================================
 
             if attempt < max_retries:
 
@@ -168,9 +156,7 @@ async def get_data(name, behavior):
                 }
 
 
-# ============================================================
 # CONCURRENT API COLLECTOR
-# ============================================================
 
 async def collect():
 
@@ -196,9 +182,7 @@ async def collect():
 
     print("\nStarting API collection...\n")
 
-    # ========================================================
     # CONCURRENT EXECUTION
-    # ========================================================
 
     tasks = [
         get_data(name, behavior)
@@ -208,9 +192,7 @@ async def collect():
     # All APIs execute concurrently
     results = await asyncio.gather(*tasks)
 
-    # ========================================================
     # DISPLAY RESULTS
-    # ========================================================
 
     print("\n")
     print("=" * 60)
@@ -242,9 +224,7 @@ async def collect():
 
             failed += 1
 
-    # ========================================================
     # PARTIAL RESULTS
-    # ========================================================
 
     print("\n")
     print("=" * 60)
@@ -268,9 +248,7 @@ async def collect():
         print("Overall    : FAILED")
 
 
-# ============================================================
 # START PROGRAM
-# ============================================================
 
 if __name__ == "__main__":
 
