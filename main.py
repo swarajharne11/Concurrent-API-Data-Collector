@@ -1,8 +1,5 @@
 import asyncio
-import logging
 import random
-
-logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 API_DATA = {
     "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
@@ -19,7 +16,6 @@ ERRORS = {
 
 
 async def api_call(name, behavior):
-    logging.info(f"{name}: Request started")
     await asyncio.sleep(5 if behavior == "timeout" else random.uniform(0.5, 1.5))
 
     if behavior == "success":
@@ -32,22 +28,16 @@ async def api_call(name, behavior):
 async def get_data(name, behavior, max_retries=2):
     for attempt in range(max_retries + 1):
         try:
-            logging.info(f"{name}: Attempt {attempt + 1}")
             result = await asyncio.wait_for(api_call(name, behavior), timeout=3)
-            logging.info(f"{name}: SUCCESS")
             return result
 
         except asyncio.TimeoutError:
-            logging.error(f"{name}: TIMEOUT after 3 seconds")
             return {"status": "failed", "error": "Request timeout"}
 
         except Exception as e:
-            logging.warning(f"{name}: {e}")
             if attempt < max_retries:
-                logging.info(f"{name}: Retrying...")
                 await asyncio.sleep(1)
             else:
-                logging.error(f"{name}: FAILED after retries")
                 return {"status": "failed", "error": str(e)}
 
 
